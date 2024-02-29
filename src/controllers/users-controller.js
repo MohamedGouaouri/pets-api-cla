@@ -1,4 +1,4 @@
-import { createUserService, getUsersService } from "../services/users-service.js";
+import { createUserService, getUserByIdService, getUsersService } from "../services/users-service.js";
 
 
 export function createUserController(userData) {
@@ -16,4 +16,5 @@ export function getUsersController() {
 
 export function getUserByIdController(userId) {
     // Call the service that gets a user by its id
+    return getUserByIdService(userId)
 }

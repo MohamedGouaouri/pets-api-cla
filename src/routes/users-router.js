@@ -1,5 +1,5 @@
 import express from 'express'
-import { createUserController, getUsersController } from '../controllers/users-controller.js'
+import { createUserController, getUserByIdController, getUsersController } from '../controllers/users-controller.js'
 
 const usersRouter = express.Router()
 
@@ -18,6 +18,14 @@ usersRouter.get('/', (req, res) => {
 
 usersRouter.get('/:userId', (req, res) => {
     // TODO: Implement get user by a id
+    const userId = parseInt(req.params.userId)
+    const user  = getUserByIdController(userId)
+    if (user) {
+        return res.json(user)
+    }
+    res.status(404).json({
+        errror: 'User not found',
+    })
 })
 
 usersRouter.put('/:userId/own/:petId', (req, res) => {

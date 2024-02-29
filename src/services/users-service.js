@@ -28,4 +28,7 @@ export function getUsersService() {
 
 export function getUserByIdService(userId) {
     // Grab the user with id userId and return it
+    return usersDB.find((user) => {
+        return user.userId == userId
+    })
 }
