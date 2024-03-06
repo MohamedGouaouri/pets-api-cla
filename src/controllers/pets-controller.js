@@ -1,17 +1,66 @@
 import { createPetService, getPetByIdService, getPetsService } from "../services/pets-service.js";
 
 
-export function createPetController(pet) {
+export async function createPetController(petData) {
     // Call the service that creates the actual pet
-    return createPetService(pet)
+    try {
+        const pet = await createPetService(petData)
+        return {
+            status: 'success',
+            error: null,
+            httpCode: 201,
+            data: pet
+        }
+    } catch (error) {
+        return {
+            status: 'error',
+            error: 'Internal server error',
+            httpCode: 500,
+        }
+    }
 }
 
-export function getPetsController() {
+export async function getPetsController() {
     // Call the service that gets all the pets
-    return getPetsService()
+    try {
+        const pets =  await getPetsService()
+        return {
+            status: 'success',
+            error: null,
+            httpCode: 200,
+            data: pets,
+        }
+    } catch (error) {
+        return {
+            status: 'error',
+            error: 'Internal server error',
+            httpCode: 500
+        }
+    }
 }
 
-export function getPetByIdController(petId) {
+export async function getPetByIdController(petId) {
     // Call the service that get a pet by its id
-    return getPetByIdService(petId)
+    try {
+        const pet =  await getPetByIdService(petId)
+        if (!pet) {
+            return {
+                status: 'error',
+                error: 'Pet not found',
+                httpCode: 404
+            }
+        }
+        return {
+            status: 'success',
+            error: null,
+            httpCode: 200,
+            data: pet
+        }
+    } catch (error) {
+        return {
+            status: 'error',
+            error: 'Internal server error',
+            httpCode: 500
+        }
+    }
 }

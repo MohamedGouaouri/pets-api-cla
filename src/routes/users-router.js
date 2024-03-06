@@ -3,7 +3,7 @@ import { createUserController, getUserByIdController, getUsersController } from 
 
 const usersRouter = express.Router()
 
-usersRouter.post('/create', (req, res) => {
+usersRouter.post('/create', async (req, res) => {
     /*  
         #swagger.tags = ["User"]
         #swagger.description = "Create user"
@@ -19,31 +19,30 @@ usersRouter.post('/create', (req, res) => {
     // Get the user data from the body
     const userData = req.body
     // Call the controller
-    const user = createUserController(userData)
-
-    res.json(user)
+    const response = await createUserController(userData)
+    if (response.status == 'success'){
+        return res.status(response.httpCode).json(response)
+    }
+    return res.status(response.httpCode).json(response)
 })
 
-usersRouter.get('/', (req, res) => {
+usersRouter.get('/', async (req, res) => {
 
     // #swagger.tags = ["User"]
     // #swagger.description = "Get all users"
-
-
-    const users = getUsersController()
-    res.json(users)
+    const response = await getUsersController()
+    if (response.status == 'success'){
+        return res.status(response.httpCode).json(response)
+    }
+    return res.status(response.httpCode).json(response)
 })
 
-usersRouter.get('/:userId', (req, res) => {
-    // TODO: Implement get user by a id
-    const userId = parseInt(req.params.userId)
-    const user  = getUserByIdController(userId)
-    if (user) {
-        return res.json(user)
+usersRouter.get('/:userId', async (req, res) => {
+    const response  = await getUserByIdController(req.params.userId)
+    if (response.status == 'success'){
+        return res.status(response.httpCode).json(response)
     }
-    res.status(404).json({
-        errror: 'User not found',
-    })
+    return res.status(response.httpCode).json(response)
 })
 
 usersRouter.put('/:userId/own/:petId', (req, res) => {

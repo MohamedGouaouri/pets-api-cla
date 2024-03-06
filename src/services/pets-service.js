@@ -1,33 +1,22 @@
-let lastPetId = 0
-const petsDB = [
-    {
-        petId: lastPetId,
-        name: 'Doggy',
-        type: 'Dog'
+import petModel from "../models/pet.model.js"
+
+export async function createPetService(pet) {
+    try {
+        return await petModel.create(pet)
+    } catch (error) {
+        throw error
     }
-]
-
-export function createPetService(pet) {
-    lastPetId++
-    petsDB.push({
-        ...pet,
-        petId: lastPetId
-    })
-    return pet
 }
 
-export function getPetsService() {
-    return petsDB
+export async function getPetsService() {
+    return await petModel.find({})
 }
 
-export function getPetByIdService(petId) {
+export async function getPetByIdService(petId) {
     // Search for pet using its petId
-    const filteredPets = petsDB.filter((pet) => {
-        return pet.petId == petId
-    })
-    if (filteredPets.length == 0) {
-        return null
+    try {
+        return await petModel.findById(petId)
+    } catch (error) {
+        throw error
     }
-    
-    return filteredPets[0]
 }

@@ -1,43 +1,27 @@
+import userModel from "../models/user.model.js"
 
 
-let lastUserId = 0
-const usersDB = [
-    {
-        userId: lastUserId,
-        name: 'Joe',
-        age: 29,
-        sexe: 'male',
-        pets: []
-    },
-    {
-        userId: lastUserId,
-        name: 'Joe2',
-        age: 29,
-        sexe: 'male',
-        pets: []
-    }
-]
-
-export function createUserService(user) {
+export async function createUserService(user) {
     // Create the user and return it
-    lastUserId++
-    usersDB.push({
-        ...user,
-        userId: lastUserId
-    })
-    return user
+   try {
+    return await userModel.create(user)
+   } catch (error) {
+    throw error
+   }
 }
 
-export function getUsersService() {
+export async function getUsersService() {
     // Return the list of users
-    return usersDB
+    return await userModel.find({})
 }
 
-export function getUserByIdService(userId) {
+export async function getUserByIdService(userId) {
     // Grab the user with id userId and return it
-    return usersDB.find((user) => {
-        return user.userId == userId
-    })
+    try {
+        return await userModel.findById(userId)
+    } catch (error) {
+        throw error
+    }
 }
 
 

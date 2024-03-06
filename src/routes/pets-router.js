@@ -3,26 +3,29 @@ import { createPetController, getPetByIdController, getPetsController } from '..
 
 const petsRouter = express.Router()
 
-petsRouter.post('/create', (req, res) => {
+petsRouter.post('/create', async (req, res) => {
     const petData = req.body;
-    const pet = createPetController(petData)
-    res.status(201).json(pet)
-})
-
-petsRouter.get('/', (req, res) => {
-    const pets = getPetsController()
-    res.json(pets)
-})
-
-petsRouter.get('/:petId', (req, res) => {
-    const petId = parseInt(req.params.petId) // "123" --> 123
-    const pet = getPetByIdController(petId)
-    if (pet) {
-        return res.json(pet)
+    const response = await createPetController(petData)
+    if (response.status == 'success'){
+        return res.status(response.httpCode).json(response)
     }
-    res.status(404).json({
-        error: 'Pet not found'
-    })
+    return res.status(response.httpCode).json(response)
+})
+
+petsRouter.get('/', async (req, res) => {
+    const response = await getPetsController()
+    if (response.status == 'success'){
+        return res.status(response.httpCode).json(response)
+    }
+    return res.status(response.httpCode).json(response)
+})
+
+petsRouter.get('/:petId', async (req, res) => {
+    const response  = await getPetByIdController(req.params.petId)
+    if (response.status == 'success'){
+        return res.status(response.httpCode).json(response)
+    }
+    return res.status(response.httpCode).json(response)
 })
 
 export default petsRouter
