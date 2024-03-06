@@ -1,3 +1,4 @@
+import petModel from "../models/pet.model.js"
 import userModel from "../models/user.model.js"
 
 
@@ -25,11 +26,22 @@ export async function getUserByIdService(userId) {
 }
 
 
-export function ownPet(userId, petId) {
-    /*
-        - Loop through the users
-        - For each user different than that user, check if a pet with petId exists
-        - If yes, deny the request (user cannot own that pet)
-        - else, make the user an owner of that pet (push petId to the array of pets)
-    */
+export async function ownPet(userId, petId) {
+    try {
+        console.log(userId, petId)
+        const user = await userModel.findById(userId)
+        const pet = await petModel.findById(petId)
+        if (!pet || !user) {
+            // TODO: Handle not found
+            return
+        }
+        pet.owner = user._id
+        await pet.save()
+        return {
+            user,
+            pet
+        }
+    } catch (error) {
+        throw error
+    }
 }

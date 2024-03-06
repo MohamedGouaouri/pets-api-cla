@@ -1,5 +1,5 @@
 import express from 'express'
-import { createUserController, getUserByIdController, getUsersController } from '../controllers/users-controller.js'
+import { createUserController, getUserByIdController, getUsersController, ownPetController } from '../controllers/users-controller.js'
 
 const usersRouter = express.Router()
 
@@ -45,8 +45,14 @@ usersRouter.get('/:userId', async (req, res) => {
     return res.status(response.httpCode).json(response)
 })
 
-usersRouter.put('/:userId/own/:petId', (req, res) => {
+usersRouter.put('/:userId/own/:petId', async (req, res) => {
     // TODO: Make the user an owner of a pet
+    console.log(req.params)
+    const response  = await ownPetController(req.params.userId, req.params.petId)
+    if (response.status == 'success'){
+        return res.status(response.httpCode).json(response)
+    }
+    return res.status(response.httpCode).json(response)
 })
 
 export default usersRouter

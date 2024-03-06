@@ -15,7 +15,7 @@ export async function getPetsService() {
 export async function getPetByIdService(petId) {
     // Search for pet using its petId
     try {
-        return await petModel.findById(petId)
+        return await petModel.findById(petId).populate('owner')
     } catch (error) {
         throw error
     }

@@ -1,4 +1,4 @@
-import { createUserService, getUserByIdService, getUsersService } from "../services/users-service.js";
+import { createUserService, getUserByIdService, getUsersService, ownPet } from "../services/users-service.js";
 
 
 export async function createUserController(userData) {
@@ -54,6 +54,32 @@ export async function getUserByIdController(userId) {
             error: null,
             httpCode: 200,
             data: user
+        }
+    } catch (error) {
+        return {
+            status: 'error',
+            error: 'Internal server error',
+            httpCode: 500
+        }
+    }
+}
+
+
+export async function ownPetController(userId, petId) {
+    try {
+        const response =  await ownPet(userId, petId)
+        if (!response) {
+            return {
+                status: 'error',
+                error: 'User or pet not found',
+                httpCode: 404
+            }
+        }
+        return {
+            status: 'success',
+            error: null,
+            httpCode: 200,
+            data: response
         }
     } catch (error) {
         return {
