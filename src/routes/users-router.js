@@ -4,14 +4,32 @@ import { createUserController, getUserByIdController, getUsersController } from 
 const usersRouter = express.Router()
 
 usersRouter.post('/create', (req, res) => {
+    /*  
+        #swagger.tags = ["User"]
+        #swagger.description = "Create user"
+        #swagger.requestBody = {
+            description: 'User data',
+            required: true,
+        }
+        #swagger.responses[201] = {
+            description: "User created successfully",
+        }
+    */
+
     // Get the user data from the body
     const userData = req.body
     // Call the controller
     const user = createUserController(userData)
+
     res.json(user)
 })
 
 usersRouter.get('/', (req, res) => {
+
+    // #swagger.tags = ["User"]
+    // #swagger.description = "Get all users"
+
+
     const users = getUsersController()
     res.json(users)
 })
